@@ -2162,6 +2162,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2183,7 +2200,14 @@ __webpack_require__.r(__webpack_exports__);
       studentName: true,
       email: true,
       address: true,
-      phoneNo: true
+      phoneNo: true,
+      // searchPhone:"",
+      params: {
+        name: '',
+        email: '',
+        address: '',
+        phoneNo: ''
+      }
     };
   },
   watch: {
@@ -2191,6 +2215,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getStudents();
     },
     search: function search(value) {
+      this.getStudents();
+    },
+    params: function params(value) {
       this.getStudents();
     },
     selectedClass: function selectedClass(value) {
@@ -2274,22 +2301,33 @@ __webpack_require__.r(__webpack_exports__);
     isChecked: function isChecked(student_id) {
       return this.checked.includes(student_id);
     },
-    getStudents: function getStudents() {
+    getResults: function getResults() {
       var _this6 = this;
+
+      axios.get('/api/students', {
+        params: {
+          keyword: this.keyword
+        }
+      }).then(function (res) {
+        return _this6.students = res.data;
+      })["catch"](function (error) {});
+    },
+    getStudents: function getStudents() {
+      var _this7 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.getStudentsUrlWithoutPaginate = "/api/students?" + "q=" + this.search + "&sort_direction=" + this.sort_direction + "&sort_field=" + this.sort_field + "&selectedClass=" + this.selectedClass + "&selectedSection=" + this.selectedSection;
       this.getStudentsUrl = this.getStudentsUrlWithoutPaginate.concat("&paginate=" + this.paginate + "&page=" + page);
       axios.get(this.getStudentsUrl).then(function (response) {
-        _this6.students = response.data;
+        _this7.students = response.data;
       });
     }
   },
   mounted: function mounted() {
-    var _this7 = this;
+    var _this8 = this;
 
     axios.get("/api/classes").then(function (response) {
-      _this7.classes = response.data.data;
+      _this8.classes = response.data.data;
     });
     this.getStudents();
   }
@@ -39335,6 +39373,114 @@ var render = function() {
               _c("th", [_vm._v("Section")]),
               _vm._v(" "),
               _c("th", [_vm._v("Action")])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("th"),
+              _vm._v(" "),
+              _vm.studentName
+                ? _c("th", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.params.name,
+                          expression: "params.name"
+                        }
+                      ],
+                      staticClass: "form-input w-100",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.params.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.params, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.email
+                ? _c("th", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.params.email,
+                          expression: "params.email"
+                        }
+                      ],
+                      staticClass: "form-input w-100",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.params.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.params, "email", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.address
+                ? _c("th", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.params.address,
+                          expression: "params.address"
+                        }
+                      ],
+                      staticClass: "form-input w-100",
+                      attrs: { type: "test" },
+                      domProps: { value: _vm.params.address },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.params, "address", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.phoneNo
+                ? _c("th", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.search,
+                          expression: "search"
+                        }
+                      ],
+                      staticClass: "form-input w-100",
+                      attrs: { type: "search" },
+                      domProps: { value: _vm.search },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.search = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e()
             ]),
             _vm._v(" "),
             _vm._l(_vm.students.data, function(student) {

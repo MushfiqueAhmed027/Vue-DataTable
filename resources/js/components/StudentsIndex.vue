@@ -129,6 +129,7 @@
         </div>
 
         <div class="card-body table-responsive p-0">
+
             <table class="table table-hover">
                 <tbody>
                     <tr>
@@ -152,6 +153,7 @@
                                 >&darr;</span
                             >
                         </th>
+
                         <th v-if="email">
                             <a href="#" @click.prevent="change_sort('email')"
                                 >Email</a
@@ -236,6 +238,21 @@
                         <th>Section</th>
                         <th>Action</th>
                     </tr>
+                    <tr>
+                        <th></th>
+                        <th v-if="studentName">
+                            <input type="text" class="form-input w-100"  v-model="params.name">
+                        </th>
+                        <th v-if="email">
+                            <input type="text" class="form-input w-100"  v-model="params.email">
+                        </th>
+                        <th v-if="address">
+                            <input type="test" class="form-input w-100"  v-model="params.address">
+                        </th>
+                        <th v-if="phoneNo">
+                            <input type="search" class="form-input w-100"  v-model="search">
+                        </th>
+                    </tr>
 
                     <tr
                         v-for="student in students.data"
@@ -302,7 +319,16 @@ export default {
             studentName:true,
             email:true,
             address:true,
-            phoneNo:true
+            phoneNo:true,
+            // searchPhone:"",
+            params:{
+                name:'',
+                email:'',
+                address:'',
+                phoneNo:''
+
+            }
+
         };
     },
 
@@ -313,7 +339,11 @@ export default {
         search: function(value) {
             this.getStudents();
         },
-        selectedClass: function(value) {
+        params: function(value) {
+            this.getStudents();
+        },
+
+       selectedClass: function(value) {
             this.selectedSection = "";
             axios
                 .get("/api/sections?class_id=" + this.selectedClass)
@@ -383,6 +413,11 @@ export default {
         },
         isChecked(student_id) {
             return this.checked.includes(student_id);
+        },
+        getResults() {
+            axios.get('/api/students', { params: { keyword: this.keyword } })
+                .then(res => this.students = res.data)
+                .catch(error => {});
         },
         getStudents(page = 1) {
             this.getStudentsUrlWithoutPaginate =

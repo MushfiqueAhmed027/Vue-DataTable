@@ -17,6 +17,7 @@ class StudentController extends Controller
         } else {
             $students = Student::studentsQuery()->get();
         }
+        
 
         return StudentResource::collection($students);
     }
@@ -40,4 +41,6 @@ class StudentController extends Controller
         $studentsArray = explode(',', $students);
         return (new StudentsExport($studentsArray))->download('students.xlsx');
     }
+
+
 }
