@@ -2318,7 +2318,14 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.getStudentsUrlWithoutPaginate = "/api/students?" + "q=" + this.search + "&sort_direction=" + this.sort_direction + "&sort_field=" + this.sort_field + "&selectedClass=" + this.selectedClass + "&selectedSection=" + this.selectedSection;
       this.getStudentsUrl = this.getStudentsUrlWithoutPaginate.concat("&paginate=" + this.paginate + "&page=" + page);
-      axios.get(this.getStudentsUrl).then(function (response) {
+      axios.get(this.getStudentsUrl, {
+        headers: {
+          name: this.params.name,
+          email: this.params.email,
+          address: this.params.address,
+          phoneNo: this.params.phoneNo
+        }
+      }).then(function (response) {
         _this7.students = response.data;
       });
     }
@@ -39393,6 +39400,21 @@ var render = function() {
                       attrs: { type: "text" },
                       domProps: { value: _vm.params.name },
                       on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.getStudents()
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
@@ -39419,6 +39441,21 @@ var render = function() {
                       attrs: { type: "text" },
                       domProps: { value: _vm.params.email },
                       on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.getStudents()
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
@@ -39445,6 +39482,21 @@ var render = function() {
                       attrs: { type: "test" },
                       domProps: { value: _vm.params.address },
                       on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.getStudents()
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
@@ -39463,19 +39515,34 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.search,
-                          expression: "search"
+                          value: _vm.params.phoneNo,
+                          expression: "params.phoneNo"
                         }
                       ],
                       staticClass: "form-input w-100",
-                      attrs: { type: "search" },
-                      domProps: { value: _vm.search },
+                      attrs: { type: "test" },
+                      domProps: { value: _vm.params.phoneNo },
                       on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.getStudents()
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.search = $event.target.value
+                          _vm.$set(_vm.params, "phoneNo", $event.target.value)
                         }
                       }
                     })

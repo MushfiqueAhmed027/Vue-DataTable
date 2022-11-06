@@ -5,19 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Exports\StudentsExport;
 use App\Http\Resources\StudentResource;
+use Illuminate\Http\Request as HttpRequest;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(HttpRequest $request)
     {
         $paginate = request('paginate');
 
-        if (isset($paginate)) {
+        if(!empty($request->header('name'))){
+            $students = Student::where('name', 'like', '%' . $request->header('name') . '%')->paginate($paginate);
+        }
+        elseif(!empty($request->header('email'))){
+            $students = Student::where('email', 'like', '%' . $request->header('email') . '%')->paginate($paginate);
+        }
+        elseif(!empty($request->header('address'))){
+            $students = Student::where('address', 'like', '%' . $request->header('address') . '%')->paginate($paginate);
+        }
+        elseif(!empty($request->header('phoneNo'))){
+            $students = Student::where('phone_number', 'like', '%' . $request->header('phoneNo') . '%')->paginate($paginate);
+        }
+        elseif (isset($paginate)) {
             $students = Student::studentsQuery()->paginate($paginate);
-        } else {
+        }
+
+        else {
             $students = Student::studentsQuery()->get();
         }
-        
+
 
         return StudentResource::collection($students);
     }
@@ -41,6 +56,4 @@ class StudentController extends Controller
         $studentsArray = explode(',', $students);
         return (new StudentsExport($studentsArray))->download('students.xlsx');
     }
-
-
 }

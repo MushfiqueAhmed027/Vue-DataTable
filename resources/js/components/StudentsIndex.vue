@@ -241,16 +241,16 @@
                     <tr>
                         <th></th>
                         <th v-if="studentName">
-                            <input type="text" class="form-input w-100"  v-model="params.name">
+                            <input @keyup.enter="getStudents()" type="text" class="form-input w-100"  v-model="params.name">
                         </th>
                         <th v-if="email">
-                            <input type="text" class="form-input w-100"  v-model="params.email">
+                            <input @keyup.enter="getStudents()" type="text" class="form-input w-100"  v-model="params.email">
                         </th>
                         <th v-if="address">
-                            <input type="test" class="form-input w-100"  v-model="params.address">
+                            <input @keyup.enter="getStudents()" type="test" class="form-input w-100"  v-model="params.address">
                         </th>
                         <th v-if="phoneNo">
-                            <input type="search" class="form-input w-100"  v-model="search">
+                            <input @keyup.enter="getStudents()" type="test" class="form-input w-100"  v-model="params.phoneNo">
                         </th>
                     </tr>
 
@@ -436,7 +436,16 @@ export default {
             this.getStudentsUrl = this.getStudentsUrlWithoutPaginate.concat(
                 "&paginate=" + this.paginate + "&page=" + page
             );
-            axios.get(this.getStudentsUrl).then(response => {
+            axios.get(this.getStudentsUrl,
+            {
+                headers:{
+                    name: this.params.name,
+                    email: this.params.email,
+                    address: this.params.address,
+                    phoneNo: this.params.phoneNo,
+                }
+              }
+            ).then(response => {
                 this.students = response.data;
             });
         }
